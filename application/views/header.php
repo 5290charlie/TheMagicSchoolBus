@@ -2,14 +2,13 @@
 <html lang="en-US">
 	<head>
 		<meta charset="UTF-8">
-		<link rel="shortcut icon" href="/static/images/icons/favicon.ico" />
 		<link href="/static/less/style.less" rel="stylesheet/less" type="text/css" />
 		<link href="/static/css/jqueryUI.css" rel="stylesheet" type="text/css" />
 		<script src="/static/js/jquery.js" type="text/javascript"></script>
 		<script src="/static/js/jqueryUI.js" type="text/javascript"></script>
 		<script src="/static/js/functions.js" type="text/javascript"></script>
 		<script src="/static/js/less.js" type="text/javascript"></script>
-		<title></title>
+		<title>TheMagicSchoolB.us</title>
 	</head>
 	<body>
 		<div id="container">
