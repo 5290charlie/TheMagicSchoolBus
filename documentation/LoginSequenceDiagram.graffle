@@ -44,7 +44,7 @@
 	<key>Creator</key>
 	<string>Charles McClung</string>
 	<key>DisplayScale</key>
-	<string>1 0/72 in = 1 0/72 in</string>
+	<string>1 0/72 in = 1.0000 in</string>
 	<key>GraphDocumentVersion</key>
 	<integer>8</integer>
 	<key>GraphicsList</key>
@@ -1240,7 +1240,7 @@ password}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\b\fs24 \cf0 \ul \ulc0 :UserManager}</string>
+\f0\b\fs24 \cf0 \ul \ulc0 :Profile}</string>
 						<key>VerticalPad</key>
 						<integer>0</integer>
 					</dict>
@@ -1324,7 +1324,7 @@ password}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2011-11-08 02:23:58 +0000</string>
+	<string>2011-11-08 04:30:31 +0000</string>
 	<key>Modifier</key>
 	<string>Charles McClung</string>
 	<key>NotesVisible</key>
@@ -1405,7 +1405,7 @@ password}</string>
 			</dict>
 		</array>
 		<key>Frame</key>
-		<string>{{46, 0}, {1634, 1028}}</string>
+		<string>{{47, 0}, {1633, 1028}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -1419,7 +1419,7 @@ password}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{-174, -70}, {1499, 873}}</string>
+		<string>{{-173, -70}, {1498, 873}}</string>
 		<key>Zoom</key>
 		<real>1</real>
 		<key>ZoomValues</key>
