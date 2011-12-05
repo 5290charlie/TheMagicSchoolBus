@@ -3,20 +3,18 @@
 require_once('header.php'); 
 ?>
 
-<!-- This is the needed HTML format for jQuery tabs() -->
-<ul>
-	<li><a href="#home">Home</a></li>
-	<li><a href="#about">About</a></li>
-	<li><a href="#dev">Dev</a></li>
-</ul>
-<div id="home">
-	Home
-</div>
-<div id="about">
-	About
-</div>
-<div id="dev">
-	Dev
+<div id="accordion">
+	<?php
+		foreach($category->result() as $c) { ?>
+			<h3><a><? echo $c->cid . ' ' . $c->title; ?></a></h3>
+			<div>
+				<p>
+					<? foreach($topic[$c->cid]->result() as $t) { ?>
+						<p><? echo $t->title; ?></p>
+					<? } ?> 
+				</p>
+			</div>
+	<?php } ?>
 </div>
 
 <?php 
