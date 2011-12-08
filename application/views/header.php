@@ -22,7 +22,7 @@
 				<?php } ?>
 			</div>
 			<!-- The header section (just title for now) at the top of every page -->
-			<div id="header">
+			<div onclick="window.location='/'" id="header">
 				TheMagicSchoolB.us
 			</div>
 			<!-- Content div begins in header.php and ends in footer.php -->

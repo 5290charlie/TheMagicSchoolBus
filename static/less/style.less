@@ -42,6 +42,7 @@ body {
 		}
 		
 		#header {
+			cursor: pointer;
 			background: #ddd;
 			border: 1px solid #999;
 			color: #444;
@@ -53,6 +54,41 @@ body {
 		#content {
 			border-right: 1px solid #999;
 			border-left: 1px solid #999;
+			
+			#accordion {
+				h3 {
+					a {
+					}
+				}
+				
+				div {
+					margin: 0;
+					padding: 0;
+					
+					p {
+						text-align: center;
+						margin: 15px;
+					}
+					
+					button {
+						font-size: 12px;
+						float: right;
+					}
+					
+					ul {
+						margin: 0 15px;
+						list-style: none;
+						padding: 0;
+						
+						li {
+							a {
+								margin: 25px;
+								padding: 0;
+							}
+						}
+					}
+				}
+			}
 		}
 		
 		#footer {
@@ -64,5 +100,9 @@ body {
 			border: 1px solid #999;
 			.border-radius-bottom(2px);
 		}
+	}
+	
+	.clear {
+		clear: both;
 	}
 }
