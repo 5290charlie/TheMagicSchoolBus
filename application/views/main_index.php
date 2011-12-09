@@ -10,13 +10,15 @@
 				<p>
 					<button onclick="newTopic(<? echo $c->cid; ?>)">New Topic</button>
 					<ul>
-						<? $i=0; foreach($topic[$c->cid]->result() as $t) { ?>
+						<? $i=0; 
+						   foreach($topic[$c->cid]->result() as $t): ?>
 							<li>
 								<a href="/main/topic/<?= $t->tid ?>/"><?= $t->title; $i++; ?></a>
 								<br />
 								<?= $t->updated; ?>
 							</li>
-						<? } if ($i==0) echo '<li>No Topics</li>'; ?> 
+						<? endforeach; 
+						   if ($i==0) echo '<li>No Topics</li>'; ?> 
 					</ul>
 				</p>
 			</div>
