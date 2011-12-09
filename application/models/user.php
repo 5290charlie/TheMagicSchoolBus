@@ -8,7 +8,7 @@ class User extends CI_Model
 {
 	var $data = array( );
 	
-	public function __construct($rank)
+	public function __construct($rank=1)
 	{
 		parent::__construct( );
 		$this->data = array(

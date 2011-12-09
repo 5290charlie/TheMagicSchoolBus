@@ -36,6 +36,9 @@ class Main extends CI_Controller {
 			$data['topic'][$c->cid] = $this->topic->getTopics($c->cid);
 		}
 		
+		// Sean: You shoud be loading the header view here rather 
+		// than require_once in the main_index file.
+		
 		// Load the main_index.php view, passing the data array
 		$this->load->view('main_index', $data);
 	}
@@ -79,38 +82,35 @@ class Main extends CI_Controller {
 	
 	public function newTopic()
 	{
-		if (isset($_POST['category']) && isset($_POST['user']) && isset($_POST['title']) && isset($_POST['details']))
-		{
-			$cid = $_POST['category'];
-			$uid = $_POST['user'];
-			$title = $_POST['title'];
-			$details = $_POST['details'];
+			$cid = $this->input->post('category');
+			$uid = $this->input->post('user');
+			$title = $this->input->post('title');
+			$details = $this->input->post('details');
 			
-			if (($cid != '') && ($uid != '') && ($title != '') && ($details))
+			if ($cid && $uid && $title && $details)
 			{
 				if ($this->topic->newTopic($title, $details, $cid, $uid) && $this->category->update($cid))
 					redirect('/main/index');
 				else
 					echo 'failure';
 			}
-		}
 	}
 	
 	public function newPost()
 	{
-		if (isset($_POST['topic']) && isset($_POST['user']) && isset($_POST['text']))
-		{
-			$tid = $_POST['topic'];
-			$uid = $_POST['user'];
-			$text = $_POST['text'];
-			
-			if (($tid != '') && ($uid != '') && ($text != ''))
-			{
-				if ($this->post->newPost($text, $tid, $uid) && $this->topic->update($tid) && $this->category->update($this->topic->getCategory($tid)))
-					redirect('/main/topic/' . $tid);
-				else
-					echo 'failure';
-			}
-		}
+		  // Sean: Should be using $this->input->post('topic') etc.
+		  // No need for checking issets or using $_POST.
+		  $tid = $this->input->post('topic');
+		  $uid = $this->input->post('user');
+		  $text = $this->input->post('text');
+		  
+		  if ($tid && $uid && $text)
+		  {
+			  if ($this->post->newPost($text, $tid, $uid) && $this->topic->update($tid) && $this->category->update($this->topic->getCategory($tid)))
+				  redirect('/main/topic/' . $tid);
+			  else
+				  echo 'failure';
+		  }
+
 	}
 }
