@@ -24,6 +24,7 @@ class Post extends CI_Model {
 		$this->views = 0;
 		$this->user = $user;
 		$this->topic = $topic;
+		$this->date = time();
 		return $this->db->insert('posts', $this);
 	}
 }

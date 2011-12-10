@@ -59,6 +59,12 @@ body {
 				h3 {
 					a {
 					}
+					
+					span {
+						font-size: 9px;
+						float: right;
+						margin: 5px;
+					}
 				}
 				
 				div {
@@ -66,8 +72,8 @@ body {
 					padding: 0;
 					
 					p {
-						text-align: center;
-						margin: 15px;
+						margin: 0;
+						padding: 0;
 					}
 					
 					button {
@@ -76,14 +82,30 @@ body {
 					}
 					
 					ul {
-						margin: 0 15px;
-						list-style: none;
+						border-top: 1px solid #ccc;
+						border-bottom: 1px solid #ccc;
+						margin: 0;
 						padding: 0;
+						list-style: none;
 						
 						li {
-							a {
-								margin: 25px;
-								padding: 0;
+							cursor: pointer;
+							background: #ccc;
+							color: #000;
+							opacity: .5;
+							
+							p {
+								padding: 15px;
+							}
+							
+							span {
+								font-size: 9px;
+								float: right;
+								margin: 5px;
+							}
+							
+							&:hover {
+								opacity: 1;
 							}
 						}
 					}

@@ -25,22 +25,25 @@ class Category extends CI_Model {
 	{
 		$this->title = $title;
 		$this->user = $user;
+		$this->updated = time();
 		return $this->db->insert('categories', $this);
 	}
 	
 	public function update($cid)
 	{	
-		$this->cid = $cid;
 		$data = array(
 			'cid' => $cid
 		);
 		$query = $this->db->get_where('categories', $data);
 		foreach($query->result() as $r)
 		{
-			$this->title = $r->title;
-			$this->user = $r->user;
+			$data1 = array(
+				'title' => $r->title,
+				'user' => $r->user,
+				'updated' => time()
+			);
 		}
-			
-		return $this->db->update('categories', $this);
+		$this->db->where('cid', $cid);
+		return $this->db->update('categories', $data1);
 	}
 }

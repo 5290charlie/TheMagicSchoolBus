@@ -35,6 +35,7 @@ class Topic extends CI_Model {
 		$this->details = $details;
 		$this->user = $user;
 		$this->category = $category;
+		$this->updated = time();
 		return $this->db->insert('topics', $this);
 	}
 	
@@ -53,19 +54,22 @@ class Topic extends CI_Model {
 	
 	public function update($tid)
 	{	
-		$this->tid = $tid;
 		$data = array(
 			'tid' => $tid
 		);
 		$query = $this->db->get_where('topics', $data);
 		foreach($query->result() as $r)
 		{
-			$this->title = $r->title;
-			$this->details = $r->details;
-			$this->category = $r->category;
-			$this->user = $r->user;
+			$data1 = array(
+				'title' => $r->title,
+				'details' => $r->details,
+				'category' => $r->category,
+				'user' => $r->user,
+				'updated' => time(),
+			);
 		}
-			
-		return $this->db->update('topics', $this);
+		
+		$this->db->where('tid', $tid);
+		return $this->db->update('topics', $data1);
 	}
 }

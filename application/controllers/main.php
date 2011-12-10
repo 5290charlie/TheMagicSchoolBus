@@ -25,7 +25,7 @@ class Main extends CI_Controller {
 		$session['id'] = $this->session->userdata('session_id');
 		$session['ip'] = $this->session->userdata('ip_address');
 		
-		if (!($data['user'] = $this->user->is_auth($session)))
+//		if (!($data['user'] = $this->user->is_auth($session)))
 			$data['user'] = FALSE;
 			
 		$data['category'] = $this->category->getAll();
@@ -49,7 +49,7 @@ class Main extends CI_Controller {
 		$session['id'] = $this->session->userdata('session_id');
 		$session['ip'] = $this->session->userdata('ip_address');
 		
-		if (!($data['user'] = $this->user->is_auth($session)))
+//		if (!($data['user'] = $this->user->is_auth($session)))
 			$data['user'] = FALSE;
 			
 		if (($data['topic'] = $this->topic->getTopic($t)) 
@@ -100,16 +100,21 @@ class Main extends CI_Controller {
 	{
 		  // Sean: Should be using $this->input->post('topic') etc.
 		  // No need for checking issets or using $_POST.
+		  // C: Fucking. Sweet.
 		  $tid = $this->input->post('topic');
 		  $uid = $this->input->post('user');
 		  $text = $this->input->post('text');
 		  
-		  if ($tid && $uid && $text)
+		  if (!empty($tid) && !empty($uid) && !empty($text))
 		  {
 			  if ($this->post->newPost($text, $tid, $uid) && $this->topic->update($tid) && $this->category->update($this->topic->getCategory($tid)))
 				  redirect('/main/topic/' . $tid);
 			  else
 				  echo 'failure';
+		  }
+		  else
+		  {
+		  	echo "$tid, $uid, $text";
 		  }
 
 	}
