@@ -1,8 +1,3 @@
-<?php 
-// Require header.php at the top of every page
-require_once('header.php'); 
-?>
-
 <div id="accordion">
 		<h3><a><? echo $topic->title; ?></a></h3>
 		<div>
@@ -20,8 +15,3 @@ require_once('header.php');
 			</p>
 		</div>
 </div>
-
-<?php 
-// Require footer.php at the bottom of every page
-require_once('footer.php'); 
-?>

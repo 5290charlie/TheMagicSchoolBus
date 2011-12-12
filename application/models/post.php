@@ -5,15 +5,14 @@ class Post extends CI_Model {
 	
 	var $pid;
 	var $text;
-	var $views;
-	var $topic;
+	var $tid;
 	var $date;
-	var $user;
+	var $uid;
 	
 	public function getPosts($tid)
 	{
 		$data = array(
-			'topic' => $tid
+			'tid' => $tid
 		);
 		return $this->db->get_where('posts', $data);
 	}
@@ -21,9 +20,8 @@ class Post extends CI_Model {
 	public function newPost($text, $topic, $user)
 	{
 		$this->text = $text;
-		$this->views = 0;
-		$this->user = $user;
-		$this->topic = $topic;
+		$this->uid = $user;
+		$this->tid = $topic;
 		$this->date = time();
 		return $this->db->insert('posts', $this);
 	}

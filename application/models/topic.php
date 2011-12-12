@@ -6,24 +6,32 @@ class Topic extends CI_Model {
 	var $tid;
 	var $title;
 	var $details;
-	var $category;
-	var $user;
+	var $cid;
+	var $uid;
 	var $updated;
+	var $views;
 	
 	public function getTopics($cid)
 	{
 		$data = array(
-			'category' => $cid
+			'cid' => $cid
 		);
-		return $this->db->get_where('topics', $data);
+		$this->db->select('*');
+		$this->db->from('topics');
+		$this->db->where($data);
+		$this->db->join('users', 'topics.uid = users.uid');
+		return $this->db->get();
 	}
 	
 	public function getTopic($tid)
 	{
+		if (!$this->viewTopic($tid)) return false;
 		$data = array(
 			'tid' => $tid
 		);
+		
 		$query = $this->db->get_where('topics', $data, 1, 0);
+		
 		foreach($query->result() as $r)
 			return $r;
 		return FALSE;
@@ -31,11 +39,22 @@ class Topic extends CI_Model {
 	
 	public function newTopic($title, $details, $category, $user)
 	{
+		$query = $this->db->get_where('categories', array('cid' => $category), 1, 0);
+		foreach ($query->result() as $r)
+		{
+			$data = array(
+				'topics' => $r->topics+1
+			);
+		}
+		$this->db->where('cid', $category);
+		if (!$this->db->update('categories', $data)) return false;
+		
 		$this->title = $title;
 		$this->details = $details;
-		$this->user = $user;
-		$this->category = $category;
+		$this->uid = $user;
+		$this->cid = $category;
 		$this->updated = time();
+		$this->views = 0;
 		return $this->db->insert('topics', $this);
 	}
 	
@@ -47,7 +66,7 @@ class Topic extends CI_Model {
 		$query = $this->db->get_where('topics', $data, 1, 0);
 		foreach($query->result() as $r)
 		{
-			return $r->category;
+			return $r->cid;
 		}
 		return -1;
 	}
@@ -61,14 +80,26 @@ class Topic extends CI_Model {
 		foreach($query->result() as $r)
 		{
 			$data1 = array(
-				'title' => $r->title,
-				'details' => $r->details,
-				'category' => $r->category,
-				'user' => $r->user,
-				'updated' => time(),
+				'updated' => time()
 			);
 		}
 		
+		$this->db->where('tid', $tid);
+		return $this->db->update('topics', $data1);
+	}
+	
+	public function viewTopic($tid)
+	{
+		$data = array(
+			'tid' => $tid
+		);
+		$query = $this->db->get_where('topics', $data, 1, 0);
+		foreach($query->result() as $r)
+		{
+			$data1 = array(
+				'views' => $r->views+1
+			);
+		}
 		$this->db->where('tid', $tid);
 		return $this->db->update('topics', $data1);
 	}

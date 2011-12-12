@@ -6,29 +6,28 @@
 
 class User extends CI_Model
 {
-	var $data = array( );
-	
-	public function __construct($rank=1)
+	var $uid;
+	var $firstname = '';
+	var $lastname = '';
+	var $email = '';
+	var $password = '';
+	var $track = '';
+	var $year = '';
+	var $bio = '';
+	var $rank = 1;
+			
+	public function __construct()
 	{
 		parent::__construct( );
-		$this->data = array(
-			'fname' => '',
-			'lname' => '',
-			'username' => '',
-			'email' => '',
-			'password' => '',
-			'track' => '',
-			'year' => '',
-			'bio' => '',
-			'rank' => $rank);
 	}
 	
-	public static function login($username, $password)
+	public function login($username, $password)
 	{
-		$query = $this->db->get_where('users', array('username' => $username));
-		if (!validate_password($query[0]['password'], $password))
-			return false;
-		else return create($query[0]);
+		$query = $this->db->get_where('users', array('username' => $username), 1, 0);
+		foreach ($query->result() as $r)
+			return $this->validate_password($r->password, $password);
+			
+		return false;
 	}
 	
 	private function validate_password($stored_password, $password)
@@ -43,7 +42,7 @@ class User extends CI_Model
 		return false;
 	}
 	
-	private function create($query)
+/*	private function create($query)
 	{
 		if (isset($query['fname']))
 			$this->$data['fname'] = $query['fname'];
@@ -66,7 +65,7 @@ class User extends CI_Model
 		
 		return true;
 	}
-	
+*/	
 	///////////////////////////////////////////////////////////
 	//					CRUD  Methods						//
 	/////////////////////////////////////////////////////////
@@ -84,33 +83,33 @@ class User extends CI_Model
 	 * 	bio - 	Short text description of user
 	 * 	rank - 1 for student | 0 for admin
 	 */
-	public static function AddUser($options = array( ))
+	public function AddUser($options = array( ))
 	{
-		if ($this->required(
-			array('fname',
-				'lname',
-				'fname',
+		if (!$this->required(
+			array('firstname',
+				'lastname',
 				'username',
 				'email', 
 				'password'),
 			$options)
 		) return false;
-		
+		echo 'after required check<br />';
 		// Hash Password with a salt at the beginning to prevent replays
-		$salt = bin2hex(my_crypt_create_iv(32, MYCRYPT_DEV_URANDOM));
-		$hash = hash('md5', $options['password']);
+		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+		$hash = hash('md5', $salt . $options['password']);
 		
 		$options['password'] = $salt . $hash;
 		
-		$this->db->insert('users', $options);
-		
-		return $this->db->insert_id( );
+		if ($this->db->insert('users', $options))
+			return $this->db->insert_id( );
+		else
+			return false;
 	}
 	
 	// Put explanation and paramter options and return value here
-	public static function UpdateUser($options = array( ))
+	public function UpdateUser($options = array( ))
 	{
-		if ($this->required(array('username'),$options)) return false;
+		if (!$this->required(array('username'),$options)) return false;
 		
 		$this->db->set('username', $options['username']);
 		
@@ -138,9 +137,9 @@ class User extends CI_Model
 	}
 	
 	// Put explanation and paramter options and return value here
-	public static function DeleteUser($options = array( ))
+	public function DeleteUser($options = array( ))
 	{
-		if ($this->required(array('username', 'password'), $options)) return false;
+		if (!$this->required(array('username', 'password'), $options)) return false;
 		
 		$this->db->set('username', $options['username']);
 		$this->db->set('password', md5($options['password']));
@@ -149,9 +148,17 @@ class User extends CI_Model
 	}
 	
 	// Put explanation and paramter options and return value here
-	public static function GetUsers($options = array( ))
+	public function GetUser($options = array( ))
 	{
+		if (!$this->required(array('username'), $options)) return false;
 		
+		$data = array(
+			'username' => $options['username']
+		);
+		$query = $this->db->get_where('users', $data, 1, 0);
+		foreach ($query->result() as $r)
+			return $r;
+		return false;
 	}
 	///////////////////////////////////////////////////////
 	
@@ -159,7 +166,7 @@ class User extends CI_Model
 	// 				HELPER FUNCTIONS				   //
 	////////////////////////////////////////////////////
 
-	private function __required($required, $data)
+	private function required($required, $data)
 	{
 		foreach ($required as $field)
 		{

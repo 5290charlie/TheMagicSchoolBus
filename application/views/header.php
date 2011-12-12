@@ -16,7 +16,7 @@
 			<!-- This is where the user can login/logout (edit account/etc) -->
 			<div id="userstatus">
 				<?php if ($user) { ?>
-					Welcome, <? echo $user->username; ?>
+					Welcome, <? echo $user->username; ?> | <a href="/main/logout/">logout</a>
 				<?php } else { ?>
 					You are not logged in
 				<?php } ?>

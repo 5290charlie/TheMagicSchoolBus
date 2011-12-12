@@ -5,8 +5,9 @@ class Category extends CI_Model {
 	
 	var $cid;
 	var $title;
-	var $user;
+	var $uid;
 	var $updated;
+	var $topics;
 	
 	public function getAll() 
 	{
@@ -24,7 +25,7 @@ class Category extends CI_Model {
 	public function newCategory($title, $user)
 	{
 		$this->title = $title;
-		$this->user = $user;
+		$this->uid = $user;
 		$this->updated = time();
 		return $this->db->insert('categories', $this);
 	}
@@ -39,7 +40,7 @@ class Category extends CI_Model {
 		{
 			$data1 = array(
 				'title' => $r->title,
-				'user' => $r->user,
+				'uid' => $r->uid,
 				'updated' => time()
 			);
 		}

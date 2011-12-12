@@ -21,12 +21,10 @@ class Main extends CI_Controller {
 	
 	public function index()
 	{
-		// Create session array with id/ip info for authentication
-		$session['id'] = $this->session->userdata('session_id');
-		$session['ip'] = $this->session->userdata('ip_address');
-		
-//		if (!($data['user'] = $this->user->is_auth($session)))
-			$data['user'] = FALSE;
+		if ($this->session->userdata('logged_in')) 
+			$data['user'] = $this->user->getUser(array('username' => $this->session->userdata('username')));		
+		else
+			redirect('/main/login/');
 			
 		$data['category'] = $this->category->getAll();
 		$data['topic'] = array();
@@ -40,23 +38,85 @@ class Main extends CI_Controller {
 		// than require_once in the main_index file.
 		
 		// Load the main_index.php view, passing the data array
+		$this->load->view('header', $data);
 		$this->load->view('main_index', $data);
+		$this->load->view('footer', $data);
 	}
 	
 	public function topic($t)
 	{
-		// Create session array with id/ip info for authentication
-		$session['id'] = $this->session->userdata('session_id');
-		$session['ip'] = $this->session->userdata('ip_address');
-		
-//		if (!($data['user'] = $this->user->is_auth($session)))
-			$data['user'] = FALSE;
+		if ($this->session->userdata('logged_in'))
+			$data['user'] = $this->user->getUser(array('username' => $this->session->userdata('username')));		
+		else
+			redirect('/main/login/');
 			
 		if (($data['topic'] = $this->topic->getTopic($t)) 
 			&& ($data['post'] = $this->post->getPosts($t)))
+		{
+			$this->load->view('header', $data);
 			$this->load->view('main_topic', $data);
+			$this->load->view('footer', $data);
+		}
 		else
 			echo 'failure';
+	}
+	
+	public function logout()
+	{
+		$this->session->set_userdata('logged_in', FALSE);
+		redirect('/');
+	}
+	
+	public function login() 
+	{
+		$data['user'] = false;
+		$this->load->view('header', $data);
+		$this->load->view('main_login');
+		$this->load->view('footer', $data);
+	}
+	
+	public function authenticate()
+	{
+		$user = $this->input->post('username');
+		$pass = $this->input->post('password');
+		
+		if ($this->user->login($user, $pass))	
+		{
+
+			$this->session->set_userdata('username', $user);
+			$this->session->set_userdata('logged_in', TRUE);
+			
+			if ($this->session->userdata('logged_in'))
+				echo 'logged in!!!!! USERDATA = ' . $this->session->userdata('username');
+			else
+				echo 'user data not set!';
+			redirect('/');
+		}
+			else
+			redirect('/main/login/');
+	}
+	
+	public function register()
+	{
+		$data['user'] = false;
+		$this->load->view('header', $data);
+		$this->load->view('main_register');
+		$this->load->view('footer');
+	}
+	
+	public function addUser()
+	{
+		$data['firstname'] = $this->input->post('firstname');
+		$data['lastname'] = $this->input->post('lastname');
+		$data['email'] = $this->input->post('email');
+		$data['username'] = $this->input->post('username');
+		$data['password'] = $this->input->post('password');
+		$conf = $this->input->post('confirm');
+		
+		if (($data['password'] == $conf) && ($this->user->addUser($data)))
+			redirect('/main/login/');
+		else
+			redirect('/main/register/');
 	}
 	
 	public function newCat()
@@ -82,40 +142,39 @@ class Main extends CI_Controller {
 	
 	public function newTopic()
 	{
-			$cid = $this->input->post('category');
-			$uid = $this->input->post('user');
-			$title = $this->input->post('title');
-			$details = $this->input->post('details');
-			
-			if ($cid && $uid && $title && $details)
-			{
-				if ($this->topic->newTopic($title, $details, $cid, $uid) && $this->category->update($cid))
-					redirect('/main/index');
-				else
-					echo 'failure';
-			}
+		$cid = $this->input->post('category');
+		$uid = $this->input->post('user');
+		$title = $this->input->post('title');
+		$details = $this->input->post('details');
+		
+		if ($cid && $uid && $title && $details)
+		{
+			if ($this->topic->newTopic($title, $details, $cid, $uid) && $this->category->update($cid))
+				redirect('/main/index');
+			else
+				echo 'failure';
+		}
 	}
 	
 	public function newPost()
 	{
-		  // Sean: Should be using $this->input->post('topic') etc.
-		  // No need for checking issets or using $_POST.
-		  // C: Fucking. Sweet.
-		  $tid = $this->input->post('topic');
-		  $uid = $this->input->post('user');
-		  $text = $this->input->post('text');
-		  
-		  if (!empty($tid) && !empty($uid) && !empty($text))
-		  {
-			  if ($this->post->newPost($text, $tid, $uid) && $this->topic->update($tid) && $this->category->update($this->topic->getCategory($tid)))
-				  redirect('/main/topic/' . $tid);
-			  else
-				  echo 'failure';
-		  }
+		// Sean: Should be using $this->input->post('topic') etc.
+		// No need for checking issets or using $_POST.
+		// C: Fucking. Sweet.
+		$tid = $this->input->post('topic');
+		$uid = $this->input->post('user');
+		$text = $this->input->post('text');
+		
+		if (!empty($tid) && !empty($uid) && !empty($text))
+		{
+		  if ($this->post->newPost($text, $tid, $uid) && $this->topic->update($tid) && $this->category->update($this->topic->getCategory($tid)))
+			  redirect('/main/topic/' . $tid);
 		  else
-		  {
-		  	echo "$tid, $uid, $text";
-		  }
-
+			  echo 'failure';
+		}
+		else
+		{
+			echo "$tid, $uid, $text";
+		}
 	}
 }
