@@ -1,31 +1,35 @@
 <div id="accordion">
 	<?php
-		foreach($category->result() as $c): ?>
+		foreach($category->result( ) as $c): ?>
 			<h3>
-				<span>
-					Updated: <?= date('m-d-Y @h:i A', $c->updated); ?>
+				<span id="updates">
+					Updated: <?= str_replace(array("-", "@"), array("/", " "), (string)date('m-d-Y @h:i A', $c->updated)); ?>
 				</span>
-				<a><?= $c->title; ?> [<?= $c->topics; ?>]</a>
+				<a><?= $c->title; ?> - (<?= $numTopics[$c->cid]; ?>)</a>
 			</h3>
 			<div>
 				<p>
 					<button onclick="newTopic(<? echo $c->cid; ?>)">New <?= $c->title; ?> Topic</button>
+					<div class="inner-header"><?= $numTopics[$c->cid]; ?> Topics</div>
 					<div class="clear"></div>
 					<ul>
 						<? $i=0; 
-						   foreach($topic[$c->cid]->result() as $t): ?>
+						   foreach($topic[$c->cid]->result() as $t): 
+						   if (($i%2)==0) $class='mod'; else $class=''; ?>
 							<li onclick="window.location='/main/topic/<?= $t->tid ?>/'">
 								<span>
-									Updated: <?= date('m-d-Y @h:i A', $t->updated); ?>
+									Updated: <?= str_replace(array("-", "@"), array("/", " "), (string)date('m-d-Y @h:i A', $t->updated)); ?>
 									<br />
-									Created By: <?= $t->username; ?>
+									User: <a href="/main/account/<?= $t->username; ?>/"><?= $t->username; ?></a>
+									<br />
+									Posts: <?= $numPosts[$t->tid]; ?>
 									<br />
 									Views: <?= $t->views; ?>
 								</span>
 								<p>
 									<?= $t->title; $i++; ?>
 									<br />
-									Details: <?= $t->details; ?>
+									<span>Details: <?= $t->details; ?></span>
 								</p>
 							</li>
 						<? endforeach; 

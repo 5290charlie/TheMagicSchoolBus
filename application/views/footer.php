@@ -11,8 +11,8 @@
 		<form method="post" action="/main/newTopic/">
 			<input type="hidden" name="category" id="newTopic-category" />
 			<input type="hidden" name="user" value="<?= $user->uid; ?>" />
-			<label for="newTopic-title">Title: </label>
-			<input type="text" name="title" id="newTopic-title" />
+			<label for="newTopic-title">Title: </label><br />
+			<input type="text" name="title" id="newTopic-title" /><br />
 			<label for="newTopic-details">Details: </label><br />
 			<textarea id="newTopic-details" name="details"></textarea>
 		</form>
@@ -21,8 +21,15 @@
 		<form method="post" action="/main/newPost/">
 			<input type="hidden" name="topic" id="newPost-topic" />
 			<input type="hidden" name="user" value="<?= $user->uid; ?>" />
-			<label for="newPost-text">Details: </label><br />
+			<label for="newPost-text">Post a reply: </label><br />
 			<textarea id="newPost-text" name="text"></textarea>
+		</form>
+	</div>
+	<div title="New Category" id="newCategory">
+		<form method="post" action="/main/newCat/">
+			<input type="hidden" name="user" value="<?= $user->uid; ?>" />
+			<label for="newCategory-title">Title: </label><br />
+			<input type="text" id="newCategory-title" name="title" />
 		</form>
 	</div>
 	<? } ?>

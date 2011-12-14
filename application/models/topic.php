@@ -11,6 +11,11 @@ class Topic extends CI_Model {
 	var $updated;
 	var $views;
 	
+	public function getAll()
+	{
+		return $this->db->get('topics');
+	}
+	
 	public function getTopics($cid)
 	{
 		$data = array(
@@ -20,6 +25,7 @@ class Topic extends CI_Model {
 		$this->db->from('topics');
 		$this->db->where($data);
 		$this->db->join('users', 'topics.uid = users.uid');
+		$this->db->order_by('updated', 'desc');
 		return $this->db->get();
 	}
 	
@@ -37,25 +43,30 @@ class Topic extends CI_Model {
 		return FALSE;
 	}
 	
-	public function newTopic($title, $details, $category, $user)
+	public function deleteTopic($tid)
 	{
-		$query = $this->db->get_where('categories', array('cid' => $category), 1, 0);
-		foreach ($query->result() as $r)
-		{
-			$data = array(
-				'topics' => $r->topics+1
-			);
-		}
-		$this->db->where('cid', $category);
-		if (!$this->db->update('categories', $data)) return false;
-		
+		return $this->db->delete('topics', array('tid' => $tid));
+	}
+	
+	public function numPosts($tid)
+	{
+		$this->db->where('tid', $tid);
+		$this->db->from('posts');
+		return $this->db->count_all_results();
+	}
+	
+	public function newTopic($title, $details, $category, $user)
+	{	
 		$this->title = $title;
 		$this->details = $details;
 		$this->uid = $user;
 		$this->cid = $category;
 		$this->updated = time();
 		$this->views = 0;
-		return $this->db->insert('topics', $this);
+		if ($this->db->insert('topics', $this))
+			return $this->db->insert_id();
+		else
+			return false;
 	}
 	
 	public function getCategory($tid)
@@ -79,9 +90,7 @@ class Topic extends CI_Model {
 		$query = $this->db->get_where('topics', $data);
 		foreach($query->result() as $r)
 		{
-			$data1 = array(
-				'updated' => time()
-			);
+			$data1['updated'] = time();
 		}
 		
 		$this->db->where('tid', $tid);

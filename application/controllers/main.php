@@ -28,10 +28,18 @@ class Main extends CI_Controller {
 			
 		$data['category'] = $this->category->getAll();
 		$data['topic'] = array();
+		$data['numTopics'] = array();
+		$data['numPosts'] = array();
 		
 		foreach($data['category']->result() as $c)
 		{
+			$data['numTopics'][$c->cid] = $this->category->numTopics($c->cid);
 			$data['topic'][$c->cid] = $this->topic->getTopics($c->cid);
+			
+			foreach ($data['topic'][$c->cid]->result() as $t)
+			{
+				$data['numPosts'][$t->tid] = $this->topic->numPosts($t->tid);
+			}
 		}
 		
 		// Sean: You shoud be loading the header view here rather 
@@ -53,12 +61,81 @@ class Main extends CI_Controller {
 		if (($data['topic'] = $this->topic->getTopic($t)) 
 			&& ($data['post'] = $this->post->getPosts($t)))
 		{
+			$data['numPosts'] = $this->topic->numPosts($t);
 			$this->load->view('header', $data);
 			$this->load->view('main_topic', $data);
 			$this->load->view('footer', $data);
 		}
 		else
 			echo 'failure';
+	}
+	
+	public function admin()
+	{
+		if ($this->session->userdata('logged_in'))
+			$data['user'] = $this->user->getUser(array('username' => $this->session->userdata('username')));	
+		elseif ($data['user']->rank < 2)
+			redirect('/');	
+		else
+			redirect('/main/login/');
+			
+		$data['user_list'] = $this->user->getAll();
+		$data['category_list'] = $this->category->getAll();
+		$data['topic_list'] = $this->topic->getAll();
+			
+		$this->load->view('header', $data);
+		$this->load->view('main_admin', $data);
+		$this->load->view('footer', $data);
+	}
+	
+	public function deleteTopic($tid)
+	{
+		$this->topic->deleteTopic($tid);
+		$this->post->deleteFromTopic($tid);
+		redirect('/main/admin/');
+	}
+	
+	public function deletePost($pid)
+	{
+		if ($tid = $this->post->topicOf($pid))
+			echo $tid;
+		else
+			echo 'fail';
+		$this->post->deletePost($pid);
+		redirect('/main/topic/' . $tid);
+	}
+	
+	public function account($user)
+	{
+		if ($this->session->userdata('logged_in'))
+			$data['user'] = $this->user->getUser(array('username' => $this->session->userdata('username')));		
+		else
+			redirect('/main/login/');
+		
+		$data['display_user'] = $this->user->getUser(array('username' => $user));
+		
+		$this->load->view('header', $data);
+		$this->load->view('main_account', $data);
+		$this->load->view('footer', $data);
+	}
+	
+	public function updateAccount($uid)
+	{
+		$user = $this->session->userdata['username'];
+		$data['uid'] = $uid;
+		$data['firstname'] = $this->input->post('firstname');
+		$data['lastname'] = $this->input->post('lastname');
+		$data['email'] = $this->input->post('email');
+		$data['track'] = $this->input->post('track');
+		$data['year'] = $this->input->post('year');
+		$data['bio'] = $this->input->post('bio');
+		if ($this->input->post('password') != '')
+			if ($this->input->post('password') == $this->input->post('confirm'))
+				$data['password'] = $this->input->post('password');
+		
+		$this->user->updateUser($data);
+		
+		redirect('/main/account/' . $user);
 	}
 	
 	public function logout()
@@ -119,14 +196,20 @@ class Main extends CI_Controller {
 			redirect('/main/register/');
 	}
 	
+	public function deleteUser($uid)
+	{
+		$this->user->DeleteUser(array('uid' => $uid));
+		redirect('/main/admin/');
+	}
+	
 	public function newCat()
 	{
-		$title = 'test';
-		$user = 1;
+		$title = $this->input->post('title');
+		$user = $this->input->post('user');
 		if ($this->category->newCategory($title, $user))
-			echo 'success';
+			redirect('/main/admin/');
 		else
-			echo 'failure';
+			redirect('/');
 	}
 	
 	public function newTop($c)
@@ -147,10 +230,12 @@ class Main extends CI_Controller {
 		$title = $this->input->post('title');
 		$details = $this->input->post('details');
 		
+		$details = str_replace("\n", "<br />", $details);
+		
 		if ($cid && $uid && $title && $details)
 		{
-			if ($this->topic->newTopic($title, $details, $cid, $uid) && $this->category->update($cid))
-				redirect('/main/index');
+			if (($t = $this->topic->newTopic($title, $details, $cid, $uid)) && $this->category->update($cid))
+				redirect('/main/topic/' . $t);
 			else
 				echo 'failure';
 		}
@@ -164,6 +249,8 @@ class Main extends CI_Controller {
 		$tid = $this->input->post('topic');
 		$uid = $this->input->post('user');
 		$text = $this->input->post('text');
+		
+		$text = str_replace("\n", "<br />", $text);
 		
 		if (!empty($tid) && !empty($uid) && !empty($text))
 		{

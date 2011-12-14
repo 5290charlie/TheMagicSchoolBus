@@ -23,12 +23,64 @@
 	box-shadow: @a @b @c @color;
 }
 
+.background_gradient (@a : #ffb43f, @b: #ff8400) {
+	background: repeat-x;
+	background-image: -khtml-gradient(linear, left top, left bottom, from(@a), to(@b));
+	background-image: -moz-linear-gradient(@a, @b);
+	background-image: -ms-linear-gradient(@a, @b);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @a), color-stop(100%, @b));
+	background-image: -webkit-linear-gradient(@a, @b);
+	background-image: -o-linear-gradient(@a, @b);
+	background-image: linear-gradient(@a, @b)
+}
+
+.ui-state-active {
+	.background_gradient;
+}
+
+.ui-accordion-header {
+	.background_gradient(#ff8400, #E17100);
+}
+
 /* Regular CSS style definitions via LESS */
 body {
-	background-image: url('/static/images/bg.jpg');
+	background: #FFF;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 1.1em;
-	color: #444;
+	color: #666;
+	
+	.button {
+		.box-shadow;
+	}
+	
+	#newTopic, #newPost {
+		input {
+			width: 100%;
+		}
+		
+		textarea {
+			width: 100%;
+			height: 100px;
+		}
+	}
+	
+	form {
+		input {
+			width: 200px;
+			padding: 5px;
+			.border-radius-top;
+			.border-radius-bottom;
+		}
+		
+		textarea {
+			width: 200px;
+			height: 100px;
+			padding: 5px;
+			.border-radius-top;
+			.border-radius-bottom;
+			resize: none;
+		}
+	}
 	
 	#container {
 		width: 900px;
@@ -36,18 +88,31 @@ body {
 		
 		#userstatus {
 			text-align: right;
-			font-size: 11px;
+			font-size: 13px;
+			font-weight: bold;
 			margin: 5px;
-			color: #fff;
+			color: #000;
+			
+			a {
+				color: #F60;
+				text-decoration: none;
+				
+				&:hover {
+					font-weight: bold;
+					text-decoration: none;
+				}
+			}
 		}
 		
 		#header {
+			height: 100px;
 			cursor: pointer;
-			background: #ddd;
-			border: 1px solid #999;
-			color: #444;
+			background: #FFF;
+			color: #ffb43f;
+			text-shadow: 0px 1px 0.6px #999;
+			font-family: Verdana, Geneva, sans-serif;
 			padding: 10px;
-			font-size: 35px;
+			font-size: 72px;
 			.border-radius-top(2px);
 		}
 		
@@ -56,12 +121,103 @@ body {
 			border-right: 1px solid #999;
 			border-left: 1px solid #999;
 			
+			.main-button {
+				font-size: 12px;
+				float: right;
+				margin: 5px;
+				.box-shadow;
+			}
+			
+			p {
+				margin: 0;
+				padding: 10px;
+			}
+			
+			.alt {
+				text-align: center;
+				padding: 15px;
+			}
+			
+			#topic {
+				p {
+					float: left;
+				}
+				
+				.details {
+					padding: 20px 20px 0px;
+				}
+			
+				span {
+					float: right;
+					text-align: right;
+					font-size: 12px;
+					padding: 5px;
+				}
+			
+				h3 {
+					margin: 0;
+					padding: 10px;
+				}
+				
+				button {
+					font-size: 12px;
+					float: right;
+					margin: 5px;
+					.box-shadow;
+				}
+				
+				ul {
+					margin: 0;
+					padding: 0;
+					border: 1px dashed white;
+					width: 85%;
+					margin: 0 auto;
+					list-style: none;
+					color: #ccc;
+					.box-shadow;
+					
+					a {
+						color: #999;
+						text-decoration: none;
+						
+						&:hover {
+							font-weight: bold;
+							text-decoration: none;
+						}
+					}
+					
+					li {
+						margin: 0;	
+						padding: 10px;
+						color: #333;
+						
+						span {
+							font-size: 11px;
+							width: 25%;
+							float: left;
+						}
+						
+						p {
+							width: 70%;
+							border-left: 1px solid white;
+							float: right;
+						}				
+					}
+				}
+			}
+			
 			#accordion {
 				span {
-					font-size: 9px;
+					font-size: 11px;
 					float: right;
 					text-align: right;
 					margin: 5px;
+				}
+				
+				.inner-header {
+					margin: 0;
+					padding: 10px;
+					font-size: 20px;
 				}
 				
 				div {
@@ -76,6 +232,7 @@ body {
 					button {
 						font-size: 12px;
 						float: right;
+						margin: 5px;
 					}
 					
 					ul {
@@ -87,17 +244,28 @@ body {
 						
 						li {
 							cursor: pointer;
-							background: #ccc;
 							color: #000;
-							opacity: .5;
 							
 							p {
 								padding: 15px;
+								
+								span {
+									float: none;
+									font-size: 11px;
+									opacity: .7;
+								}
 							}
 							
-							&:hover {
-								opacity: 1;
+							a {
+								color: #F60;
+								text-decoration: none;
+								
+								&:hover {
+									font-weight: bold;
+									text-decoration: none;
+								}
 							}
+							
 						}
 					}
 				}
@@ -117,5 +285,9 @@ body {
 	
 	.clear {
 		clear: both;
+	}
+	
+	.right {
+		text-align: right;
 	}
 }

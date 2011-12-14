@@ -7,7 +7,6 @@ class Category extends CI_Model {
 	var $title;
 	var $uid;
 	var $updated;
-	var $topics;
 	
 	public function getAll() 
 	{
@@ -20,6 +19,13 @@ class Category extends CI_Model {
 			'category' => $this->cid
 		);
 		return $this->db->get_where('topics', $data);
+	}
+
+	public function numTopics($cid)
+	{
+		$this->db->where('cid', $cid);
+		$this->db->from('topics');
+		return $this->db->count_all_results();
 	}
 
 	public function newCategory($title, $user)

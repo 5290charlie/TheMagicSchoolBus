@@ -10,6 +10,7 @@ class User extends CI_Model
 	var $firstname = '';
 	var $lastname = '';
 	var $email = '';
+	var $username = '';
 	var $password = '';
 	var $track = '';
 	var $year = '';
@@ -109,19 +110,31 @@ class User extends CI_Model
 	// Put explanation and paramter options and return value here
 	public function UpdateUser($options = array( ))
 	{
-		if (!$this->required(array('username'),$options)) return false;
-		
-		$this->db->set('username', $options['username']);
-		
-		if (isset($options['password']))
-			$this->db->set('password', md5($options['password']));
+		if (!$this->required(array('uid'),$options)) return false;
+				
+		if (isset($options['firstname']))
+			$data['firstname'] = $options['firstname'];
+		if (isset($options['lastname']))
+			$data['lastname'] = $options['lastname'];
+		if (isset($options['email']))
+			$data['email'] = $options['email'];
 		if (isset($options['track']))
-			$this->db->set('track', $options['track']);
+			$data['track'] = $options['track'];
 		if (isset($options['year']))
-			$this->db->set('year', $option['year']);
+			$data['year'] = $options['year'];
 		if (isset($options['bio']))
-			$this->db->set('bio', $options['bio']);
-		
+			$data['bio'] = $options['bio'];
+		if (isset($options['password']))
+		{
+			// Hash Password with a salt at the beginning to prevent replays
+			$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+			$hash = hash('md5', $salt . $options['password']);
+			$data['password'] = $salt . $hash;
+		}
+			
+		$this->db->where('uid', $options['uid']);
+		return $this->db->update('users', $data);
+		/*
 		if (isset($options['limit']) && isset($options['offset']))
 			$this->db->limit($options['limit'], $options['offset']);
 		elseif (isset($options['limit']))
@@ -134,17 +147,18 @@ class User extends CI_Model
 			
 		if (isset($options['username']))
 			return $query->result( );
+		*/
 	}
 	
 	// Put explanation and paramter options and return value here
 	public function DeleteUser($options = array( ))
 	{
-		if (!$this->required(array('username', 'password'), $options)) return false;
+		if (!$this->required(array('uid'), $options)) return false;
 		
-		$this->db->set('username', $options['username']);
+/*		$this->db->set('username', $options['username']);
 		$this->db->set('password', md5($options['password']));
-		
-		$rows = $this->db-delete('users');
+*/		
+		$rows = $this->db->delete('users', array('uid' => $options['uid']));
 	}
 	
 	// Put explanation and paramter options and return value here
@@ -159,6 +173,14 @@ class User extends CI_Model
 		foreach ($query->result() as $r)
 			return $r;
 		return false;
+	}
+	
+	public function getAll()
+	{
+		$this->db->select('*');
+		$this->db->from('users');
+		$this->db->order_by('rank', 'desc');
+		return $this->db->get();
 	}
 	///////////////////////////////////////////////////////
 	

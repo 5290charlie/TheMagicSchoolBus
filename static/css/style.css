@@ -1,0 +1,13 @@
+/* CSS Document */
+
+li:nth-of-type(odd) {
+	background: #fff;
+}
+
+li:nth-of-type(even) {
+	background: #ccc;
+}
+
+span.updates {
+	font-size:14px;
+}
