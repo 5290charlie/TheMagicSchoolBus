@@ -19,6 +19,7 @@
 					<? if (($user->rank > 1) || ($user->username == $p->username)) { ?>
 						<img title="Delete Post" style="float:left;" src="/static/images/icons/delete.png" onclick="deletePost(<?= $p->pid; ?>)" />
 					<? } ?>
+					<img class="topic_avatar" src="<?= $p->avatar; ?>" />
 					<?= date(DATE_FORMAT, $p->date); ?>
 					<br />
 					User: <a href="/main/account/<?= $p->username; ?>/"><?= $p->username; ?></a>

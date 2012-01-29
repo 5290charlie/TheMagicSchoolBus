@@ -129,6 +129,35 @@ class Main extends CI_Controller {
 		$data['track'] = $this->input->post('track');
 		$data['year'] = $this->input->post('year');
 		$data['bio'] = $this->input->post('bio');
+		
+		if (isset($_FILES['photo']))
+		{
+			$image = $_FILES['photo']['name'];
+			
+			if ($image)
+			{
+				$file = stripslashes($_FILES['photo']['name']);
+				$i = strrpos($file,".");
+				$l = strlen($file) - $i;
+				$ext = substr($file,$i+1,$l);
+				$ext = strtolower($ext);
+				
+				if (($ext != 'jpg') && ($ext != 'jpeg') && ($ext != 'png') && ($ext != 'gif') && ($ext != 'bmp'))
+					die('bad filetype');
+				else
+				{
+					$image_name = $user . '.' . $ext;
+					$localname = DIR_USER_IMAGES . $image_name;
+					$avatar = '/static/images/users/' . $image_name;
+				
+					if(copy($_FILES['photo']['tmp_name'], $localname))
+						$data['avatar'] = $avatar;
+					else
+						$data['avatar'] = '/static/images/users/default.jpg';
+				}
+			}
+		}
+				
 		if ($this->input->post('password') != '')
 			if ($this->input->post('password') == $this->input->post('confirm'))
 				$data['password'] = $this->input->post('password');

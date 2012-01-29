@@ -9,9 +9,19 @@
 </p>
 <hr>
 <? if ($myself) { ?>
-	<form id="account-form" method="post" action="/main/updateAccount/<?= $user->uid; ?>/">
+	<form id="account-form" enctype="multipart/form-data" method="post" action="/main/updateAccount/<?= $user->uid; ?>/">
 <? } ?>
 <table align="center">
+	<tr>
+		<td class="right">Avatar:</td>
+		<td>
+			<img class="account_avatar" src="<?= $display_user->avatar; ?>" />
+			<? if($myself) { ?>
+				<br />
+				<input type="file" name="photo" onchange="document.getElementById('account-form').submit()" /> 
+			<? } ?>
+		</td>
+	</tr>
 	<tr>
 		<td class="right">Firstname:</td>
 		<td>

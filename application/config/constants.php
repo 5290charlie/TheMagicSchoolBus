@@ -35,7 +35,7 @@ define('FOPEN_WRITE_CREATE',					'ab');
 define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
-define('DATE_FORMAT', 'm-d-Y @h:i A');
+define('DATE_FORMAT', 'm/d/Y');
 /*
 |--------------------------------------------------------------------------
 | MSB Constants
@@ -45,6 +45,8 @@ define('DATE_FORMAT', 'm-d-Y @h:i A');
 |
 */
 
+
+define('DIR_USER_IMAGES', '/var/www/themagicschoolb.us/public/static/images/users/');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

@@ -16,6 +16,7 @@ class User extends CI_Model
 	var $year = '';
 	var $bio = '';
 	var $rank = 1;
+	var $avatar = '';
 			
 	public function __construct()
 	{
@@ -124,6 +125,8 @@ class User extends CI_Model
 			$data['year'] = $options['year'];
 		if (isset($options['bio']))
 			$data['bio'] = $options['bio'];
+		if (isset($options['avatar']))
+			$data['avatar'] = $options['avatar'];
 		if (isset($options['password']))
 		{
 			// Hash Password with a salt at the beginning to prevent replays
