@@ -29,7 +29,7 @@
 								<p>
 									<?= $t->title; $i++; ?>
 									<br />
-									<span>Details: <?= $t->details; ?></span>
+									<span><b>Details:</b> <?= $t->details; ?></span>
 								</p>
 							</li>
 						<? endforeach; 

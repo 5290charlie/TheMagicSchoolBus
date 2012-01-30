@@ -35,8 +35,11 @@ class Topic extends CI_Model {
 		$data = array(
 			'tid' => $tid
 		);
-		
-		$query = $this->db->get_where('topics', $data, 1, 0);
+		$this->db->select('*');
+		$this->db->from('topics');
+		$this->db->where($data);
+		$this->db->join('users', 'topics.uid = users.uid');
+		$query = $this->db->get_where();
 		
 		foreach($query->result() as $r)
 			return $r;

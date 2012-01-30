@@ -5,8 +5,8 @@
 		<button onclick="window.location='/'">Back</button>
 	</span>
 	<div class="details">
-    <h2><?= $topic->title; ?></h2>
-    <h5><b>Details:</b><br /><?= $topic->details; ?></h5>
+    <h2><?= $topic->title; ?><span>[<a href="/main/account/<?= $topic->username; ?>"><?= $topic->username; ?></a>]</span></h2>
+    <b>Details:</b><br /><?= $topic->details; ?>
     </div>
 	
 	<div class="clear"></div>

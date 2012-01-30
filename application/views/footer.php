@@ -1,4 +1,5 @@
 			<!-- End of content div -->
+				<div class="clear"></div>
 			</div>
 			<!-- Footer div at the bottom of every page -->
 			<div id="footer">

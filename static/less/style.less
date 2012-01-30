@@ -135,9 +135,21 @@ body {
 			border-right: 1px solid #999;
 			border-left: 1px solid #999;
 			
+			.account_info {
+				float: right;
+				margin-right: 30px;
+			}
+			
 			.account_avatar {
-				width: 200px;
-				.box-shadow;
+				float: left;
+				margin-left: 30px;
+				
+				img {
+					width: 200px;
+					.box-shadow;
+					margin: 0;
+					padding: 0;
+				}
 			}
 			
 			.main-button {
@@ -171,6 +183,25 @@ body {
 					text-align: right;
 					font-size: 12px;
 					padding: 5px;
+				}
+				
+				h2 {
+					span {
+						font-size: 10px;
+						margin: 10px;
+						float: none;
+						
+						a {
+							color: #F60;
+							text-decoration: none;
+							font-weight: normal;
+							
+							&:hover {
+								font-weight: bold;
+								text-decoration: none;
+							}
+						}
+					}
 				}
 			
 				h3 {
