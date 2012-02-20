@@ -7,6 +7,8 @@ jQuery(document).ready(function() {
 		icons: false
 	});
 	
+	$("#admin-panel").tabs();
+	
 	if ($("#autoFocus").val() != "")
 		$($("#autoFocus").val()).focus();
 	
@@ -57,6 +59,12 @@ jQuery(document).ready(function() {
 	
 	$("#newTopic, #newPost, #newCategory").dialog('close');
 });
+
+function changeAvatar() {
+	$("#account_avatar img").css('display','none');
+	$("#account_avatar span").html('Uploading new avatar . . .');
+	$("#account-form").submit();
+}
 
 function newTopic(cid) {
 	$("#newTopic-category").val(cid);

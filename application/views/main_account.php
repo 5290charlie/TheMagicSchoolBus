@@ -11,13 +11,14 @@
 <? if ($myself) { ?>
 	<form id="account-form" enctype="multipart/form-data" method="post" action="/main/updateAccount/<?= $user->uid; ?>/">
 <? } ?>
-<span class="account_avatar">
+<span id="account_avatar">
 	<h2>Avatar</h2>
 	<br />
-	<img class="account_avatar" src="<?= $display_user->avatar; ?>" />
+	<span></span>
+	<img src="<?= $display_user->avatar; ?>" />
 	<? if($myself) { ?>
 		<br />
-		<input type="file" name="photo" onchange="document.getElementById('account-form').submit()" /> 
+		<input type="file" name="photo" onchange="changeAvatar()" /> 
 	<? } ?>
 </span>
 <span class="account_info">
